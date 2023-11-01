@@ -21,7 +21,7 @@ dp = Dispatcher()
 bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
 
 
-async def button_create(button_num1, button_num2):
+async def button_create(button_num1: int, button_num2: int) -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.add(InlineKeyboardButton(
         text=f"Yes ({button_num1})",
@@ -42,7 +42,7 @@ async def get_counter_from_text(text) -> int:
     return counter
 
 
-async def mute_user(chat_id, user):
+async def mute_user(chat_id: int, user: types.User) -> None:
     permissions = ChatPermissions(can_send_messages=False,
                                   can_send_audios=False,
                                   can_send_documents=False,
@@ -61,11 +61,11 @@ async def mute_user(chat_id, user):
                            text=f'Пользователь с айди {user.first_name} получт мут на 7 дней')
 
 
-async def check_new_voice(user, message_id) -> bool:
+async def check_new_voice(user: types.User, message_id: int) -> bool:
     host = os.getenv('REDIS_HOST')
     port = os.getenv('REDIS_PORT')
     r = redis.Redis(host=host, port=port, decode_responses=True)
-    if r.get(user.first_name + user.last_name + str(message_id)) is not None:
+    if r.get(str(user.id) + str(message_id)) is not None:
         return False
     r.set(user.first_name + user.last_name + str(message_id), 'true', ex=600)
     return True
