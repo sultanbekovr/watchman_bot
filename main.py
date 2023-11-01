@@ -67,7 +67,7 @@ async def check_new_voice(user: types.User, message_id: int) -> bool:
     r = redis.Redis(host=host, port=port, decode_responses=True)
     if r.get(str(user.id) + str(message_id)) is not None:
         return False
-    r.set(str(user.id) + str(message_id) + str(message_id), 'true', ex=600)
+    r.set(str(user.id) + str(message_id), 'true', ex=600)
     return True
 
 
