@@ -75,7 +75,7 @@ async def check_new_voice(user: types.User, message_id: int) -> bool:
 async def echo_handler(message: types.Message) -> None:
     builder = await button_create(0, 0)
 
-    await message.answer(f'Дать муть на 7 дней для {message.reply_to_message.from_user.first_name}?', reply_markup=builder.as_markup(), reply_to_message_id=message.reply_to_message.message_id)
+    await message.answer(f'Дать мут на 7 дней для {message.reply_to_message.from_user.first_name} (до 10 голосов)?', reply_markup=builder.as_markup(), reply_to_message_id=message.reply_to_message.message_id)
 
 
 @dp.callback_query(F.data == 'Yes')
@@ -91,9 +91,9 @@ async def change_yes_button_data(callback: types.CallbackQuery):
     else:
         await bot.answer_callback_query(callback_query_id=callback.id, text='Вы уже проголосовали')
 
-    if yes_counter >= 10:
+    if yes_counter >= 3:
         await bot.delete_message(chat_id=callback.message.chat.id, message_id=callback.message.message_id)
-        await mute_user(callback.message.chat.id, callback.from_user)
+        await mute_user(callback.message.chat.id, callback.message.reply_to_message.from_user)
 
 
 @dp.callback_query(F.data == 'No')
@@ -120,5 +120,4 @@ async def main() -> None:
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
-
 
