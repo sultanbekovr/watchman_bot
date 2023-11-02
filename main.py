@@ -93,7 +93,7 @@ async def change_yes_button_data(callback: types.CallbackQuery):
 
     if yes_counter >= 10:
         await bot.delete_message(chat_id=callback.message.chat.id, message_id=callback.message.message_id)
-        await mute_user(callback.message.chat.id, callback.from_user.id)
+        await mute_user(callback.message.chat.id, callback.from_user)
 
 
 @dp.callback_query(F.data == 'No')
