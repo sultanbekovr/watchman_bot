@@ -91,7 +91,7 @@ async def change_yes_button_data(callback: types.CallbackQuery):
     else:
         await bot.answer_callback_query(callback_query_id=callback.id, text='Вы уже проголосовали')
 
-    if yes_counter >= 3:
+    if yes_counter >= 10:
         await bot.delete_message(chat_id=callback.message.chat.id, message_id=callback.message.message_id)
         await mute_user(callback.message.chat.id, callback.message.reply_to_message.from_user)
 
